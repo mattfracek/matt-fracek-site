@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>matt fracek</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0a0a0a;
+            --bg-surface: #111111;
+            --bg-elevated: #181818;
+            --text: #c8c8b4;
+            --text-bright: #e0e0cc;
+            --text-muted: #7a7a68;
+            --text-faint: #4a4a3e;
+            --accent: #b8a078;
+            --accent-dim: #8a7456;
+            --accent-glow: rgba(184, 160, 120, 0.12);
+            --accent-glow-strong: rgba(184, 160, 120, 0.25);
+            --green: #4a8a5c;
+            --green-dim: rgba(74, 138, 92, 0.15);
+            --border: rgba(200, 200, 180, 0.06);
+            --border-hover: rgba(200, 200, 180, 0.12);
+            --scanline: rgba(200, 200, 180, 0.015);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Courier Prime', 'Courier New', monospace;
+            font-size: 0.92rem;
+            line-height: 1.8;
+            -webkit-font-smoothing: antialiased;
+            min-height: 100vh;
+        }
+
+        /* CRT scanline overlay */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 2px,
+                var(--scanline) 2px,
+                var(--scanline) 4px
+            );
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        /* subtle vignette */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at 50% 50%, transparent 60%, rgba(0,0,0,0.4) 100%);
+            pointer-events: none;
+            z-index: 99;
+        }
+
+        /* cursor blink */
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 0.55em;
+            height: 1.1em;
+            background: var(--accent);
+            margin-left: 2px;
+            animation: blink 1s step-end infinite;
+            vertical-align: text-bottom;
+        }
+
+        /* nav */
+        nav {
+            position: relative;
+            z-index: 10;
+            max-width: 680px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            font-weight: 300;
+            letter-spacing: 0.04em;
+        }
+
+        nav a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.15s ease;
+        }
+
+        nav a:hover {
+            color: var(--accent);
+        }
+
+        nav .site-name {
+            font-family: 'Special Elite', cursive;
+            font-size: 1rem;
+            color: var(--text-bright);
+            letter-spacing: 0.06em;
+        }
+
+        nav .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        nav .nav-links a::before {
+            content: '> ';
+            color: var(--text-faint);
+        }
+
+        /* sunset symbol */
+        .sunset-symbol {
+            text-align: center;
+            margin-bottom: 2.5rem;
+            user-select: none;
+        }
+
+        /* hero */
+        .hero {
+            position: relative;
+            z-index: 1;
+            max-width: 680px;
+            margin: 0 auto;
+            padding: 4rem 1.5rem 4rem;
+        }
+
+        .hero h1 {
+            font-family: 'Special Elite', cursive;
+            font-weight: 400;
+            font-size: 1.35rem;
+            line-height: 1.75;
+            color: var(--text-bright);
+            max-width: 580px;
+        }
+
+        .hero .tagline {
+            margin-top: 1.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            letter-spacing: 0.03em;
+            font-weight: 300;
+        }
+
+        .hero .tagline::before {
+            content: '// ';
+            color: var(--text-faint);
+        }
+
+        /* terminal divider */
+        .divider {
+            max-width: 680px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            color: var(--text-faint);
+            letter-spacing: 0.3em;
+            text-align: center;
+        }
+
+        .divider span {
+            display: inline-block;
+            padding: 0.5rem 0;
+        }
+
+        /* articles */
+        .articles {
+            position: relative;
+            z-index: 1;
+            max-width: 680px;
+            margin: 0 auto;
+            padding: 2.5rem 1.5rem;
+        }
+
+        .section-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.68rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--text-faint);
+            margin-bottom: 2rem;
+        }
+
+        .section-label::before {
+            content: '$ ';
+            color: var(--accent-dim);
+        }
+
+        .article-item {
+            margin-bottom: 0;
+            padding: 1.3rem 1.2rem;
+            border-left: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            cursor: pointer;
+            transition: border-color 0.15s ease, background 0.15s ease;
+        }
+
+        .article-item:first-of-type {
+            border-top: 1px solid var(--border);
+        }
+
+        .article-item:hover {
+            border-left-color: var(--accent);
+            background: var(--bg-surface);
+        }
+
+        .article-item .date {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.68rem;
+            color: var(--text-faint);
+            letter-spacing: 0.04em;
+            margin-bottom: 0.3rem;
+        }
+
+        .article-item h2 {
+            font-family: 'Special Elite', cursive;
+            font-weight: 400;
+            font-size: 1.2rem;
+            line-height: 1.4;
+            color: var(--text-bright);
+            margin-bottom: 0.4rem;
+        }
+
+        .article-item .preview {
+            font-family: 'Courier Prime', monospace;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.65;
+        }
+
+        /* subscribe */
+        .subscribe {
+            position: relative;
+            z-index: 1;
+            max-width: 680px;
+            margin: 0 auto;
+            padding: 2.5rem 1.5rem 3.5rem;
+        }
+
+        .subscribe p {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+            max-width: 440px;
+        }
+
+        .subscribe-form {
+            display: flex;
+            gap: 0.6rem;
+            max-width: 400px;
+        }
+
+        .subscribe-form input[type="email"] {
+            flex: 1;
+            padding: 0.6rem 0.8rem;
+            border: 1px solid var(--border-hover);
+            border-radius: 0;
+            background: var(--bg);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            font-weight: 300;
+            color: var(--text);
+            outline: none;
+            transition: border-color 0.15s ease;
+        }
+
+        .subscribe-form input[type="email"]:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 8px var(--accent-glow);
+        }
+
+        .subscribe-form input[type="email"]::placeholder {
+            color: var(--text-faint);
+        }
+
+        .subscribe-form button {
+            padding: 0.6rem 1.2rem;
+            background: transparent;
+            color: var(--accent);
+            border: 1px solid var(--accent-dim);
+            border-radius: 0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            font-weight: 400;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            white-space: nowrap;
+            letter-spacing: 0.04em;
+            text-transform: lowercase;
+        }
+
+        .subscribe-form button:hover {
+            background: var(--accent);
+            color: var(--bg);
+            box-shadow: 0 0 12px var(--accent-glow);
+        }
+
+        /* footer */
+        footer {
+            position: relative;
+            z-index: 1;
+            max-width: 680px;
+            margin: 0 auto;
+            padding: 1.5rem 1.5rem 2.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            color: var(--text-faint);
+            display: flex;
+            justify-content: space-between;
+            letter-spacing: 0.04em;
+            border-top: 1px solid var(--border);
+        }
+
+        footer a {
+            color: var(--text-faint);
+            text-decoration: none;
+            transition: color 0.15s ease;
+        }
+
+        footer a:hover {
+            color: var(--accent);
+        }
+
+        /* about page */
+        .about {
+            position: relative;
+            z-index: 1;
+            max-width: 680px;
+            margin: 0 auto;
+            padding: 4rem 1.5rem 3rem;
+        }
+
+        .about p {
+            font-family: 'Courier Prime', monospace;
+            font-size: 0.95rem;
+            line-height: 1.85;
+            margin-bottom: 1.5rem;
+            color: var(--text);
+            max-width: 580px;
+        }
+
+        /* article page */
+        .article-full {
+            position: relative;
+            z-index: 1;
+            max-width: 680px;
+            margin: 0 auto;
+            padding: 3.5rem 1.5rem;
+        }
+
+        .article-full .back {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.72rem;
+            color: var(--text-faint);
+            text-decoration: none;
+            letter-spacing: 0.03em;
+            transition: color 0.15s ease;
+            display: inline-block;
+            margin-bottom: 2.5rem;
+        }
+
+        .article-full .back::before {
+            content: '< ';
+        }
+
+        .article-full .back:hover {
+            color: var(--accent);
+        }
+
+        .article-full .date {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.68rem;
+            color: var(--text-faint);
+            letter-spacing: 0.04em;
+            margin-bottom: 0.6rem;
+        }
+
+        .article-full h1 {
+            font-family: 'Special Elite', cursive;
+            font-weight: 400;
+            font-size: 1.7rem;
+            line-height: 1.4;
+            margin-bottom: 0.5rem;
+            color: var(--text-bright);
+        }
+
+        .article-full .article-subtitle {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            font-weight: 300;
+            margin-bottom: 3rem;
+            letter-spacing: 0.02em;
+        }
+
+        .article-full .article-subtitle::before {
+            content: '// ';
+            color: var(--text-faint);
+        }
+
+        .article-full .content p {
+            font-family: 'Courier Prime', monospace;
+            font-size: 0.92rem;
+            line-height: 1.85;
+            margin-bottom: 1.4rem;
+            color: var(--text);
+        }
+
+        /* page sections */
+        .page { display: none; }
+        .page.active { display: block; }
+
+        /* selection */
+        ::selection {
+            background: var(--accent-glow-strong);
+            color: var(--text-bright);
+        }
+
+        /* scrollbar */
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: var(--bg); }
+        ::-webkit-scrollbar-thumb { background: var(--text-faint); border-radius: 0; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+        /* mobile */
+        @media (max-width: 600px) {
+            nav { padding: 1.5rem 1.2rem 0; }
+            .hero { padding: 3rem 1.2rem 2.5rem; }
+            .hero h1 { font-size: 1.15rem; }
+            .articles { padding: 2rem 1.2rem; }
+            .article-item { padding: 1rem; }
+            .article-item h2 { font-size: 1.1rem; }
+            .subscribe { padding: 2rem 1.2rem 2.5rem; }
+            .subscribe-form { flex-direction: column; }
+            .subscribe-form button { width: 100%; }
+            .about { padding: 3rem 1.2rem; }
+            .article-full { padding: 2.5rem 1.2rem; }
+            .article-full h1 { font-size: 1.4rem; }
+            footer { padding: 1.5rem 1.2rem 2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <a href="#" class="site-name" onclick="showPage('home')">matt fracek</a>
+        <div class="nav-links">
+            <a href="#" onclick="showPage('home')">writing</a>
+            <a href="#" onclick="showPage('about')">about</a>
+        </div>
+    </nav>
+
+    <!-- HOME PAGE -->
+    <div id="page-home" class="page active">
+
+        <div class="hero">
+            <div class="sunset-symbol">
+                <svg width="220" height="52" viewBox="0 0 220 52" fill="none">
+                    <path d="M110 8 A52 52 0 0 1 162 48" stroke="var(--accent)" stroke-width="1" fill="none" opacity="0.5"/>
+                    <path d="M110 8 A52 52 0 0 0 58 48" stroke="var(--accent)" stroke-width="1" fill="none" opacity="0.5"/>
+                    <line x1="0" y1="48" x2="220" y2="48" stroke="var(--accent)" stroke-width="1" opacity="0.4"/>
+                    <line x1="15" y1="51" x2="205" y2="51" stroke="var(--accent)" stroke-width="0.5" opacity="0.2" stroke-dasharray="3 3"/>
+                </svg>
+            </div>
+            <h1>writing about presence, surrender, and the cycle of forgetting and remembering that seems to be the whole practice.<span class="cursor"></span></h1>
+            <p class="tagline">these are the notes i write on the way back.</p>
+        </div>
+
+        <div class="divider"><span>- - - - - - - - &#9671; - - - - - - - -</span></div>
+
+        <div class="articles">
+            <div class="section-label">recent writing</div>
+
+            <div class="article-item" onclick="showPage('article-cosmic')">
+                <div class="date">2026.03.19</div>
+                <h2>the cosmic imagination</h2>
+                <p class="preview">look around you. everything you see that was man-made came from the human imagination. that's not much of a stretch. but here's where it gets interesting...</p>
+            </div>
+
+            <div class="article-item" onclick="showPage('article-fish')">
+                <div class="date">2026.03.17</div>
+                <h2>the fish doesn't know it's in water</h2>
+                <p class="preview">the scariest thing about being caught in a pattern is that you don't know you're in it. not in a vague, philosophical way. I mean literally...</p>
+            </div>
+
+            <div class="article-item" onclick="showPage('article-bath')">
+                <div class="date">2026.03.15</div>
+                <h2>the bath</h2>
+                <p class="preview">every breakthrough i've had in the last year happened in the same place. not at my desk. not in a book. not in meditation. in the bath.</p>
+            </div>
+
+            <div class="article-item" onclick="showPage('article-enough')">
+                <div class="date">2026.03.13</div>
+                <h2>good enough</h2>
+                <p class="preview">I was in the bath the other night and something landed that I've been circling for years. I am good enough as I am.</p>
+            </div>
+
+            <div class="article-item" onclick="showPage('article-trap')">
+                <div class="date">2026.03.11</div>
+                <h2>the trap you don't see</h2>
+                <p class="preview">I got caught last week and didn't even know it. that's the whole trap, by the way. not the getting caught — the not knowing.</p>
+            </div>
+
+            <div class="article-item" onclick="showPage('article-teaching')">
+                <div class="date">2026.03.10</div>
+                <h2>the hardest teaching</h2>
+                <p class="preview">every tradition I've ever studied comes down to the same thing. love one another. so why don't we? because it's hard...</p>
+            </div>
+        </div>
+
+        <div class="divider"><span>- - - - - - - - &#9671; - - - - - - - -</span></div>
+
+        <div class="subscribe">
+            <p>if this resonates, i send new pieces every week or two. no spam. just the practice.</p>
+            <div class="subscribe-form">
+                <input type="email" placeholder="your@email.com">
+                <button>subscribe</button>
+            </div>
+        </div>
+
+        <footer>
+            <span>matt fracek &copy; 2026</span>
+            <span>the returning is the practice</span>
+        </footer>
+    </div>
+
+    <!-- ABOUT PAGE -->
+    <div id="page-about" class="page">
+        <div class="about">
+            <p>i'm matt - husband to aly, dad to a little boy named walker. i started a brand called nature backs somewhere along the way that inspires people to go outside.</p>
+            <p>for as long as i can remember i've been writing notes to myself about presence, surrender, and what it means to actually be here now. thousands upon thousands of them. bath notes, walk notes, daily reflections. and i still forget every few weeks. the returning is the practice, though.</p>
+            <p>this is the space between forgetting and remembering. i write here to find my way back.</p>
+        </div>
+
+        <div class="divider"><span>- - - - - - - - &#9671; - - - - - - - -</span></div>
+
+        <div class="subscribe">
+            <p>if this resonates, i send new pieces every week or two.</p>
+            <div class="subscribe-form">
+                <input type="email" placeholder="your@email.com">
+                <button>subscribe</button>
+            </div>
+        </div>
+
+        <footer>
+            <span>matt fracek &copy; 2026</span>
+            <span>the returning is the practice</span>
+        </footer>
+    </div>
+
+    <!-- ARTICLE: THE COSMIC IMAGINATION -->
+    <div id="page-article-cosmic" class="page">
+        <div class="article-full">
+            <a href="#" class="back" onclick="showPage('home')">back to all writing</a>
+            <div class="date">2026.03.19</div>
+            <h1>the cosmic imagination</h1>
+            <div class="article-subtitle">what if our brains don't generate imagination — what if they receive it?</div>
+            <div class="content">
+                <p>look around you. everything you see that was man-made came from the human imagination. that's not much of a stretch. anyone can draw that conclusion. the chair you're sitting in. the building around you. the phone in your hand. all of it started as a thought in someone's mind before it became a thing in the world.</p>
+                <p>that part is obvious. we don't even question it.</p>
+                <p>but here's where it gets interesting. once you see that trajectory — thought becomes thing — you can extend it. what about the stuff that isn't man-made? the trees. the birds. the grass pushing through concrete. your own body. your eyes reading these words right now.</p>
+                <p>what if imagination isn't just a human faculty?</p>
+                <p>we tend to think it is because we assume it happens in our brains. that imagination is something we do. a function of neurons firing. but what if our brains don't generate imagination — what if they receive it? like an antenna picking up a signal that was already there.</p>
+                <p>imagination is always imagining. it didn't start with us. it imagined us. it imagined the trees, the mountains, the oceans, the light hitting the water at sunset. all of it — every single thing you can perceive — is imagination expressing itself through form.</p>
+                <p>I think about it like this: there's one cosmic mind. one imagination. and everything we see is that imagination dramatizing itself into existence. the entire universe is a play — not in the sense that it's fake, but in the sense that it's being performed. created. expressed. right now. continuously.</p>
+                <p>the human imagination is just a small slice of this. when you have an idea — a song, a business, a painting, a building — you're not inventing something from nothing. you're tapping into the same force that invented everything. you're a localized expression of the cosmic imagination, imagining through a human body for a little while.</p>
+                <p>and once you see it this way, the world gets impossibly beautiful.</p>
+                <p>the bird outside your window isn't just a bird. it's imagination in feathers. the child laughing in the next room isn't just a kid. it's the cosmic mind playing. the thought you just had — the one that made you feel something — that wasn't yours. it was flowing through you.</p>
+                <p>we walk around inside this miracle and forget what it is. we see buildings and think "construction." we see trees and think "nature." but it's all the same thing. it's all imagination at work. the human kind and the cosmic kind are not two different things — one is just a drop in the other's ocean.</p>
+                <p>I don't know why this hits me so hard. maybe because it means nothing is ordinary. maybe because it means the creative impulse I feel — to write, to build, to make something — isn't just mine. it's the universe doing what it does, through me, for a little while.</p>
+                <p>all of this around us is a play and dramatization of the imagination. how could it be anything less?</p>
+            </div>
+        </div>
+
+        <div class="divider"><span>- - - - - - - - &#9671; - - - - - - - -</span></div>
+
+        <div class="subscribe">
+            <p>if this resonated, i write new pieces every week or two.</p>
+            <div class="subscribe-form">
+                <input type="email" placeholder="your@email.com">
+                <button>subscribe</button>
+            </div>
+        </div>
+
+        <footer>
+            <span>matt fracek &copy; 2026</span>
+            <a href="#" onclick="showPage('home')">back to all writing</a>
+        </footer>
+    </div>
+
+    <!-- ARTICLE: THE FISH -->
+    <div id="page-article-fish" class="page">
+        <div class="article-full">
+            <a href="#" class="back" onclick="showPage('home')">back to all writing</a>
+            <div class="date">2026.03.17</div>
+            <h1>the fish doesn't know it's in water</h1>
+            <div class="article-subtitle">on patterns, blindness, and the practice of catching yourself sooner</div>
+            <div class="content">
+                <p>the scariest thing about being caught in a pattern is that you don't know you're in it.</p>
+                <p>not in a vague, philosophical way. I mean literally — you are inside the thing and you cannot see it. your eyes are open and you're blind. you're smart, you're self-aware, you've read the books and done the work and you still don't see it. because that's what makes it a trap. not that it's hard to escape. that you don't know you're in one.</p>
+                <p>I've tracked this in myself for seven years. I call it the intellect cycle. it goes like this:</p>
+                <p>I experience presence. peace. clarity. the world gets vivid and quiet and I think — this is it. this is how I want to live. I write about it. I feel certain.</p>
+                <p>then, without me noticing, my mind starts to grab. planning. controlling. optimizing. it's subtle at first — just a little more thinking than usual. a little more future than present. but it builds. days pass. the aliveness drains. I get irritable, distracted, disconnected. I'm operating on autopilot and calling it productivity.</p>
+                <p>and the whole time — the whole time — I don't see it. I'm the fish that doesn't know it's in water. I have notes about this exact pattern. I have checkpoints I wrote during previous moments of clarity specifically to catch myself. and I still get caught. because the trap isn't ignorance. it's blindness from the inside.</p>
+                <p>the only thing that breaks it is stopping.</p>
+                <p>not thinking harder. not reading another book. not adding another framework to the collection. stopping. getting still enough that the mind runs out of momentum and the truth becomes obvious.</p>
+                <p>for me it's usually the bath. twenty minutes of nothing and suddenly I can see the last week clearly — what my mind was doing, where it grabbed, when I left the present. it's like someone turned on the lights. and I always think the same thing: how did I not see this? it was so obvious.</p>
+                <p>but that's the nature of it. it's never obvious from inside.</p>
+                <p>I think this is why every tradition emphasizes stillness. not because stillness is productive. not because you'll "figure things out" in the silence. but because the patterns that run your life are invisible to the mind that's running them. you need to step outside the current. you need to stop swimming long enough to notice the water.</p>
+                <p>here's what I've stopped expecting: that I'll break the cycle permanently. that one day I'll be so aware that I never get caught again. that's the ego's version of the goal — mastery, completion, a finish line.</p>
+                <p>the real practice is just catching it sooner. last year I'd go months before noticing. now it's weeks. sometimes days. that's not failure. that's the whole game.</p>
+                <p>so if you're reading this and something feels off — if the days are blurring, if the aliveness has drained, if you're busy but not present — you might be in the water right now. you might be the fish.</p>
+                <p>the way out isn't to swim harder. it's to stop swimming.</p>
+                <p>get still. get quiet. see what becomes obvious when you do.</p>
+            </div>
+        </div>
+
+        <div class="divider"><span>- - - - - - - - &#9671; - - - - - - - -</span></div>
+
+        <div class="subscribe">
+            <p>if this resonated, i write new pieces every week or two.</p>
+            <div class="subscribe-form">
+                <input type="email" placeholder="your@email.com">
+                <button>subscribe</button>
+            </div>
+        </div>
+
+        <footer>
+            <span>matt fracek &copy; 2026</span>
+            <a href="#" onclick="showPage('home')">back to all writing</a>
+        </footer>
+    </div>
+
+    <!-- PLACEHOLDER ARTICLES -->
+    <div id="page-article-bath" class="page">
+        <div class="article-full">
+            <a href="#" class="back" onclick="showPage('home')">back to all writing</a>
+            <div class="date">2026.03.15</div>
+            <h1>the bath</h1>
+            <div class="article-subtitle">stillness as technology</div>
+            <div class="content"><p>coming soon.</p></div>
+        </div>
+        <footer style="max-width:680px;margin:0 auto;padding:1.5rem;font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:var(--text-faint);border-top:1px solid var(--border);display:flex;justify-content:space-between;letter-spacing:0.04em;">
+            <span>matt fracek &copy; 2026</span>
+            <a href="#" onclick="showPage('home')" style="color:var(--text-faint);text-decoration:none;">back to all writing</a>
+        </footer>
+    </div>
+
+    <div id="page-article-enough" class="page">
+        <div class="article-full">
+            <a href="#" class="back" onclick="showPage('home')">back to all writing</a>
+            <div class="date">2026.03.13</div>
+            <h1>good enough</h1>
+            <div class="article-subtitle">the exit was always contentment</div>
+            <div class="content"><p>coming soon.</p></div>
+        </div>
+        <footer style="max-width:680px;margin:0 auto;padding:1.5rem;font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:var(--text-faint);border-top:1px solid var(--border);display:flex;justify-content:space-between;letter-spacing:0.04em;">
+            <span>matt fracek &copy; 2026</span>
+            <a href="#" onclick="showPage('home')" style="color:var(--text-faint);text-decoration:none;">back to all writing</a>
+        </footer>
+    </div>
+
+    <div id="page-article-trap" class="page">
+        <div class="article-full">
+            <a href="#" class="back" onclick="showPage('home')">back to all writing</a>
+            <div class="date">2026.03.11</div>
+            <h1>the trap you don't see</h1>
+            <div class="article-subtitle">how my mind quietly turned love into a self-improvement project</div>
+            <div class="content"><p>coming soon.</p></div>
+        </div>
+        <footer style="max-width:680px;margin:0 auto;padding:1.5rem;font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:var(--text-faint);border-top:1px solid var(--border);display:flex;justify-content:space-between;letter-spacing:0.04em;">
+            <span>matt fracek &copy; 2026</span>
+            <a href="#" onclick="showPage('home')" style="color:var(--text-faint);text-decoration:none;">back to all writing</a>
+        </footer>
+    </div>
+
+    <div id="page-article-teaching" class="page">
+        <div class="article-full">
+            <a href="#" class="back" onclick="showPage('home')">back to all writing</a>
+            <div class="date">2026.03.10</div>
+            <h1>the hardest teaching</h1>
+            <div class="article-subtitle">why we avoid the simplest instruction every tradition agrees on</div>
+            <div class="content"><p>coming soon.</p></div>
+        </div>
+        <footer style="max-width:680px;margin:0 auto;padding:1.5rem;font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:var(--text-faint);border-top:1px solid var(--border);display:flex;justify-content:space-between;letter-spacing:0.04em;">
+            <span>matt fracek &copy; 2026</span>
+            <a href="#" onclick="showPage('home')" style="color:var(--text-faint);text-decoration:none;">back to all writing</a>
+        </footer>
+    </div>
+
+    <script>
+        function showPage(page) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById('page-' + page).classList.add('active');
+            window.scrollTo(0, 0);
+        }
+    </script>
+
+</body>
+</html>
