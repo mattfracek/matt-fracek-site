@@ -540,7 +540,7 @@
 
         <div class="subscribe">
             <p>if this resonates, i send new pieces every week or two. no spam. just the practice.</p>
-            <div class="subscribe-form">
+            <form class="subscribe-form">
                 <input type="email" placeholder="your@email.com">
                 <button>subscribe</button>
             </div>
@@ -564,7 +564,7 @@
 
         <div class="subscribe">
             <p>if this resonates, i send new pieces every week or two.</p>
-            <div class="subscribe-form">
+            <form class="subscribe-form">
                 <input type="email" placeholder="your@email.com">
                 <button>subscribe</button>
             </div>
@@ -604,7 +604,7 @@
 
         <div class="subscribe">
             <p>if this resonated, i write new pieces every week or two.</p>
-            <div class="subscribe-form">
+            <form class="subscribe-form">
                 <input type="email" placeholder="your@email.com">
                 <button>subscribe</button>
             </div>
@@ -647,7 +647,7 @@
 
         <div class="subscribe">
             <p>if this resonated, i write new pieces every week or two.</p>
-            <div class="subscribe-form">
+            <form class="subscribe-form">
                 <input type="email" placeholder="your@email.com">
                 <button>subscribe</button>
             </div>
@@ -722,6 +722,39 @@
             document.getElementById('page-' + page).classList.add('active');
             window.scrollTo(0, 0);
         }
+
+        document.querySelectorAll('.subscribe-form').forEach(form => {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const input = this.querySelector('input[type="email"]');
+                const button = this.querySelector('button');
+                const email = input.value.trim();
+                if (!email) return;
+
+                button.textContent = '...';
+                button.disabled = true;
+
+                fetch('https://script.google.com/macros/s/AKfycbw2SsMH4Fe1Lm7mKzQDQZM0OhbakrOow6xqyzzV16eT2t1cO9A1vL1I2Ioj2a6aQyNV7w/exec', {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: email })
+                }).then(() => {
+                    input.value = '';
+                    button.textContent = 'subscribed';
+                    setTimeout(() => {
+                        button.textContent = 'subscribe';
+                        button.disabled = false;
+                    }, 3000);
+                }).catch(() => {
+                    button.textContent = 'error';
+                    setTimeout(() => {
+                        button.textContent = 'subscribe';
+                        button.disabled = false;
+                    }, 2000);
+                });
+            });
+        });
     </script>
 
 </body>
