@@ -256,8 +256,8 @@
             line-height: 1.65;
         }
 
-        /* notes section */
-        .notes-section {
+        /* wiki section */
+        .wiki-section {
             position: relative;
             z-index: 1;
             max-width: 680px;
@@ -265,37 +265,12 @@
             padding: 2.5rem 1.5rem;
         }
 
-        .notes-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 0.6rem;
-        }
-
-        .note-card {
-            padding: 1rem;
-            border: 1px solid var(--border);
-            cursor: pointer;
-            transition: border-color 0.15s ease, background 0.15s ease;
-        }
-
-        .note-card:hover {
-            border-color: var(--accent-dim);
-            background: var(--bg-surface);
-        }
-
-        .note-title {
-            font-family: 'Special Elite', cursive;
-            font-size: 0.95rem;
-            color: var(--text-bright);
-            margin-bottom: 0.3rem;
-        }
-
-        .note-summary {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.68rem;
-            font-weight: 300;
-            color: var(--text-muted);
-            line-height: 1.5;
+        .wiki-content p {
+            font-family: 'Courier Prime', monospace;
+            font-size: 0.92rem;
+            line-height: 1.85;
+            margin-bottom: 1.4rem;
+            color: var(--text);
         }
 
         /* note page */
@@ -383,8 +358,7 @@
         }
 
         @media (max-width: 600px) {
-            .notes-grid { grid-template-columns: 1fr; }
-            .notes-section { padding: 2rem 1.2rem; }
+            .wiki-section { padding: 2rem 1.2rem; }
             .note-full { padding: 2.5rem 1.2rem; }
             .note-full h1 { font-size: 1.3rem; }
         }
@@ -640,33 +614,16 @@
 
         <div class="divider"><span>- - - - - - - - &#9671; - - - - - - - -</span></div>
 
-        <div class="notes-section">
-            <div class="section-label">notes — a look inside my brain</div>
-            <div class="notes-grid">
-                <div class="note-card" onclick="showPage('note-god-is-stillness')">
-                    <div class="note-title">God is stillness</div>
-                    <div class="note-summary">everything else is the simulation of stillness through motion and sound. the universe is God dreaming.</div>
-                </div>
-                <div class="note-card" onclick="showPage('note-returning')">
-                    <div class="note-title">the returning is the practice</div>
-                    <div class="note-summary">the cycle of forgetting and remembering isn't failure — it IS the path. catching it sooner is the only progress.</div>
-                </div>
-                <div class="note-card" onclick="showPage('note-not-the-doer')">
-                    <div class="note-title">you are not the doer</div>
-                    <div class="note-summary">active engagement without attachment to outcomes. do your duty; surrender the fruit.</div>
-                </div>
-                <div class="note-card" onclick="showPage('note-asymptote')">
-                    <div class="note-title">the intellect is an asymptote</div>
-                    <div class="note-summary">you never quite arrive through analysis. the intellectual path has no finish line. love might.</div>
-                </div>
-                <div class="note-card" onclick="showPage('note-bhakti')">
-                    <div class="note-title">bhakti as the path forward</div>
-                    <div class="note-summary">the intellectual path has no finish line. what if I just loved the cosmic mind instead of endlessly analyzing it?</div>
-                </div>
-                <div class="note-card" onclick="showPage('note-cycle')">
-                    <div class="note-title">the documented cycle</div>
-                    <div class="note-summary">the six-stage pattern I've tracked for 7+ years: presence → hijack → suffering → recognition → surrender → return.</div>
-                </div>
+        <div class="wiki-section">
+            <div class="section-label">a look inside my brain</div>
+            <div class="wiki-content">
+                <p>here's where I'm at.</p>
+                <p>I believe the present moment is the kingdom of heaven — not as metaphor, as literal reality. when you're not lost in thought, when you're actually here, there's nothing missing. that's the thing I keep coming back to. seven years of notes and it all points to the same place: be here now.</p>
+                <p>the problem is I'm an intellectualizer by nature. I read voraciously, I build frameworks, I synthesize ideas from different traditions. <a class="wiki-link" onclick="showPage('note-god-is-stillness')">walter russell</a> gave me the mechanism — how reality actually works, stillness as source, motion as simulation. the Bhagavad Gita gave me the practice — act fully, release outcomes, <a class="wiki-link" onclick="showPage('note-not-the-doer')">you're not the doer</a>. Jesus gave me the destination — love, forgiveness, the kingdom within. Ram Dass showed me it's possible for a western intellectual to actually surrender. and Maharaj-ji — he just loved. didn't explain anything. just loved.</p>
+                <p>I've mapped all this out. I can explain how it fits together. but here's the irony: the thing I'm reaching for is beyond the intellect's grasp. I keep using the mind to understand what can only be surrendered to. <a class="wiki-link" onclick="showPage('note-asymptote')">the intellect is an asymptote</a> — you approach but never arrive through analysis. love might actually get you there.</p>
+                <p>so lately I've been exploring <a class="wiki-link" onclick="showPage('note-bhakti')">bhakti</a>. what if I just <em>loved</em> the cosmic mind instead of endlessly analyzing it? what if devotion is the path forward, not more frameworks?</p>
+                <p>I have <a class="wiki-link" onclick="showPage('note-cycle')">a documented cycle</a>. presence → intellect hijacks → suffering accumulates → recognition → surrender → return. I've tracked it for seven years. the insight that changed everything: the cycle isn't failure. <a class="wiki-link" onclick="showPage('note-returning')">the returning IS the practice</a>. catching it sooner — that's the only real progress.</p>
+                <p>the tension that defines me: I'm a controller learning to surrender. a planner learning to trust. I use the mind to exhaust the mind, structure to point toward the structureless. the cage and the key are made of the same material.</p>
             </div>
         </div>
 
