@@ -256,6 +256,139 @@
             line-height: 1.65;
         }
 
+        /* notes section */
+        .notes-section {
+            position: relative;
+            z-index: 1;
+            max-width: 680px;
+            margin: 0 auto;
+            padding: 2.5rem 1.5rem;
+        }
+
+        .notes-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.6rem;
+        }
+
+        .note-card {
+            padding: 1rem;
+            border: 1px solid var(--border);
+            cursor: pointer;
+            transition: border-color 0.15s ease, background 0.15s ease;
+        }
+
+        .note-card:hover {
+            border-color: var(--accent-dim);
+            background: var(--bg-surface);
+        }
+
+        .note-title {
+            font-family: 'Special Elite', cursive;
+            font-size: 0.95rem;
+            color: var(--text-bright);
+            margin-bottom: 0.3rem;
+        }
+
+        .note-summary {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.68rem;
+            font-weight: 300;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        /* note page */
+        .note-full {
+            position: relative;
+            z-index: 1;
+            max-width: 680px;
+            margin: 0 auto;
+            padding: 3.5rem 1.5rem;
+        }
+
+        .note-full .back {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.72rem;
+            color: var(--text-faint);
+            text-decoration: none;
+            letter-spacing: 0.03em;
+            transition: color 0.15s ease;
+            display: inline-block;
+            margin-bottom: 2rem;
+        }
+
+        .note-full .back::before {
+            content: '< ';
+        }
+
+        .note-full .back:hover {
+            color: var(--accent);
+        }
+
+        .note-full h1 {
+            font-family: 'Special Elite', cursive;
+            font-weight: 400;
+            font-size: 1.5rem;
+            line-height: 1.4;
+            margin-bottom: 0.5rem;
+            color: var(--text-bright);
+        }
+
+        .note-full .note-meta {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.68rem;
+            color: var(--text-faint);
+            margin-bottom: 2rem;
+            letter-spacing: 0.03em;
+        }
+
+        .note-full .content p {
+            font-family: 'Courier Prime', monospace;
+            font-size: 0.92rem;
+            line-height: 1.85;
+            margin-bottom: 1.4rem;
+            color: var(--text);
+        }
+
+        .note-full .content .wiki-link {
+            color: var(--accent);
+            text-decoration: none;
+            border-bottom: 1px dotted var(--accent-dim);
+            cursor: pointer;
+            transition: border-color 0.15s ease;
+        }
+
+        .note-full .content .wiki-link:hover {
+            border-bottom-style: solid;
+        }
+
+        .note-full .see-also {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.72rem;
+            color: var(--text-faint);
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .note-full .see-also a {
+            color: var(--accent-dim);
+            text-decoration: none;
+            transition: color 0.15s ease;
+        }
+
+        .note-full .see-also a:hover {
+            color: var(--accent);
+        }
+
+        @media (max-width: 600px) {
+            .notes-grid { grid-template-columns: 1fr; }
+            .notes-section { padding: 2rem 1.2rem; }
+            .note-full { padding: 2.5rem 1.2rem; }
+            .note-full h1 { font-size: 1.3rem; }
+        }
+
         /* subscribe */
         .subscribe {
             position: relative;
@@ -507,8 +640,40 @@
 
         <div class="divider"><span>- - - - - - - - &#9671; - - - - - - - -</span></div>
 
+        <div class="notes-section">
+            <div class="section-label">notes — a look inside my brain</div>
+            <div class="notes-grid">
+                <div class="note-card" onclick="showPage('note-god-is-stillness')">
+                    <div class="note-title">God is stillness</div>
+                    <div class="note-summary">everything else is the simulation of stillness through motion and sound. the universe is God dreaming.</div>
+                </div>
+                <div class="note-card" onclick="showPage('note-returning')">
+                    <div class="note-title">the returning is the practice</div>
+                    <div class="note-summary">the cycle of forgetting and remembering isn't failure — it IS the path. catching it sooner is the only progress.</div>
+                </div>
+                <div class="note-card" onclick="showPage('note-not-the-doer')">
+                    <div class="note-title">you are not the doer</div>
+                    <div class="note-summary">active engagement without attachment to outcomes. do your duty; surrender the fruit.</div>
+                </div>
+                <div class="note-card" onclick="showPage('note-asymptote')">
+                    <div class="note-title">the intellect is an asymptote</div>
+                    <div class="note-summary">you never quite arrive through analysis. the intellectual path has no finish line. love might.</div>
+                </div>
+                <div class="note-card" onclick="showPage('note-bhakti')">
+                    <div class="note-title">bhakti as the path forward</div>
+                    <div class="note-summary">the intellectual path has no finish line. what if I just loved the cosmic mind instead of endlessly analyzing it?</div>
+                </div>
+                <div class="note-card" onclick="showPage('note-cycle')">
+                    <div class="note-title">the documented cycle</div>
+                    <div class="note-summary">the six-stage pattern I've tracked for 7+ years: presence → hijack → suffering → recognition → surrender → return.</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="divider"><span>- - - - - - - - &#9671; - - - - - - - -</span></div>
+
         <div class="articles">
-            <div class="section-label">recent writing</div>
+            <div class="section-label">writing</div>
 
             <div class="article-item" onclick="showPage('article-universe')">
                 <div class="date">2026.03.24</div>
@@ -800,6 +965,125 @@
             <span>matt fracek &copy; 2026</span>
             <a href="#" onclick="showPage('home')">back to all writing</a>
         </footer>
+    </div>
+
+    <!-- NOTE: GOD IS STILLNESS -->
+    <div id="page-note-god-is-stillness" class="page">
+        <div class="note-full">
+            <a href="#" class="back" onclick="showPage('home')">back home</a>
+            <h1>God is stillness</h1>
+            <div class="note-meta">core belief · cosmology · walter russell</div>
+            <div class="content">
+                <p>everything in the universe is motion. light, sound, matter, thought — all of it is vibration. but motion requires something to move <em>through</em>. that something is stillness.</p>
+                <p><a class="wiki-link" onclick="showPage('note-cycle')">walter russell</a> calls this the "magnetic light" — the invisible, still presence that underlies all visible motion. it doesn't move, but everything moves within it. like the screen that doesn't change while the movie plays.</p>
+                <p>this is what Jesus meant by the Kingdom. not a place you go — a dimension you wake up to. the stillness that's already here, underneath the noise.</p>
+                <p>the universe is God dreaming. motion is the dream. stillness is the dreamer. we are characters in the dream who can wake up to our true nature as the dreamer itself.</p>
+                <p>this isn't metaphor. it's mechanism. walter russell mapped the physics of it. the mystics experienced it. both point to the same thing: you are not the motion. <a class="wiki-link" onclick="showPage('note-not-the-doer')">you are not the doer</a>. you are the stillness watching.</p>
+            </div>
+            <div class="see-also">see also: <a onclick="showPage('note-asymptote')">the intellect is an asymptote</a> · <a onclick="showPage('note-not-the-doer')">you are not the doer</a></div>
+        </div>
+    </div>
+
+    <!-- NOTE: THE RETURNING IS THE PRACTICE -->
+    <div id="page-note-returning" class="page">
+        <div class="note-full">
+            <a href="#" class="back" onclick="showPage('home')">back home</a>
+            <h1>the returning is the practice</h1>
+            <div class="note-meta">core belief · practice · pattern</div>
+            <div class="content">
+                <p>I have <a class="wiki-link" onclick="showPage('note-cycle')">a cycle I've tracked for 7+ years</a>:</p>
+                <p>1. experience presence/peace<br>2. intellect hijacks — planning, controlling, consuming<br>3. suffering accumulates — disconnected, anxious<br>4. recognition — "here we go again"<br>5. surrender — forced back through pain<br>6. return — writing notes like these</p>
+                <p>for years I treated this as failure. "why can't I just stay present?"</p>
+                <p>but the cycle isn't the problem. <strong>the cycle IS the practice.</strong></p>
+                <p>Ram Dass said it: "I've been lost in thought for 45 minutes, and now I'm back. that's the practice." not staying present forever. returning when you notice you've left.</p>
+                <p>the only real progress is <strong>catching it sooner</strong>. shortening the duration between step 2 and step 4. recognizing the hijack before suffering has to force the recognition.</p>
+                <p>this reframe changes everything. you're not failing when you forget. you're succeeding when you return. the returning IS the path.</p>
+                <p><a class="wiki-link" onclick="showPage('note-bhakti')">bhakti might help</a> — love as the anchor that's harder to drift from than intellectual understanding.</p>
+            </div>
+            <div class="see-also">see also: <a onclick="showPage('note-asymptote')">the intellect is an asymptote</a> · <a onclick="showPage('note-not-the-doer')">you are not the doer</a> · <a onclick="showPage('note-cycle')">the documented cycle</a></div>
+        </div>
+    </div>
+
+    <!-- NOTE: YOU ARE NOT THE DOER -->
+    <div id="page-note-not-the-doer" class="page">
+        <div class="note-full">
+            <a href="#" class="back" onclick="showPage('home')">back home</a>
+            <h1>you are not the doer</h1>
+            <div class="note-meta">core belief · karma yoga · gita</div>
+            <div class="content">
+                <p>the Bhagavad Gita teaches karma yoga: act fully, but don't attach to outcomes.</p>
+                <p>this isn't passivity. it's <strong>full participation without gripping</strong>. you play your role completely — work hard, care deeply, show up — while knowing you don't control the results.</p>
+                <p>Arjuna had to fight. that was his duty. but he didn't have to win. winning wasn't his job. fighting was.</p>
+                <p>this reframes everything:<br>— you write the book. whether it sells isn't yours.<br>— you start the company. whether it succeeds isn't yours.<br>— you love the person. whether they stay isn't yours.</p>
+                <p>the doing is yours. the fruit belongs to <a class="wiki-link" onclick="showPage('note-god-is-stillness')">stillness</a>.</p>
+                <p>this connects to <a class="wiki-link" onclick="showPage('note-returning')">the returning</a>. when I grip outcomes — need the business to work, need the writing to land, need the presence to last — I'm at stage 2 of <a class="wiki-link" onclick="showPage('note-cycle')">the cycle</a>. the intellect has hijacked.</p>
+                <p>non-doership is the release. not "I don't care" — "I care AND I release."</p>
+                <p>the actor plays their part fully while knowing it's a play. full participation in the drama while knowing the drama isn't the whole story.</p>
+            </div>
+            <div class="see-also">see also: <a onclick="showPage('note-god-is-stillness')">God is stillness</a> · <a onclick="showPage('note-returning')">the returning is the practice</a> · <a onclick="showPage('note-cycle')">the documented cycle</a></div>
+        </div>
+    </div>
+
+    <!-- NOTE: THE INTELLECT IS AN ASYMPTOTE -->
+    <div id="page-note-asymptote" class="page">
+        <div class="note-full">
+            <a href="#" class="back" onclick="showPage('home')">back home</a>
+            <h1>the intellect is an asymptote</h1>
+            <div class="note-meta">core belief · intellect · jnana</div>
+            <div class="content">
+                <p>an asymptote approaches but never touches. that's the intellect's relationship to truth.</p>
+                <p>you read a book and feel closer. you build a framework and feel you understand. you synthesize traditions and feel you've arrived. but there's always another book, another framework, another refinement.</p>
+                <p>the mind can't grasp what's beyond the mind. it's like trying to bite your own teeth.</p>
+                <p>this is my <a class="wiki-link" onclick="showPage('note-cycle')">documented pattern</a>: I read walter russell, feel illuminated, think I've got it — then find myself back at stage 2, hijacked by the very intellect that felt so useful.</p>
+                <p>Ram Dass was a Harvard professor. he read everything. knew everything. then he met Maharaj-ji, who didn't explain anything — just loved. and something in Ram Dass finally relaxed.</p>
+                <p>the intellect is a wonderful servant. the problem is when it becomes the master. when you think understanding IS the goal, rather than a finger pointing at the moon.</p>
+                <p><a class="wiki-link" onclick="showPage('note-bhakti')">bhakti</a> might be different. love isn't asymptotic. you don't approach love — you're either in it or you're not. the heart can arrive where the mind can only circle.</p>
+            </div>
+            <div class="see-also">see also: <a onclick="showPage('note-returning')">the returning is the practice</a> · <a onclick="showPage('note-bhakti')">bhakti as the path forward</a></div>
+        </div>
+    </div>
+
+    <!-- NOTE: BHAKTI AS THE PATH FORWARD -->
+    <div id="page-note-bhakti" class="page">
+        <div class="note-full">
+            <a href="#" class="back" onclick="showPage('home')">back home</a>
+            <h1>bhakti as the path forward</h1>
+            <div class="note-meta">active exploration · bhakti · jnana</div>
+            <div class="content">
+                <p>I've spent years on the jnana path — reading, analyzing, building frameworks. walter russell, the Bhagavad Gita, synthesis after synthesis. the mind trying to understand its way to freedom.</p>
+                <p>but <a class="wiki-link" onclick="showPage('note-asymptote')">the intellect is an asymptote</a>. you approach but never arrive. there's always another book, another framework, another refinement.</p>
+                <p>what if the thing I'm reaching for — presence, surrender, stillness — is beyond the intellect's grasp? what if I've been using the wrong tool?</p>
+                <p>Maharaj-ji never explained anything. he just loved. Ram Dass was a Harvard professor who surrendered to a man who only said "love everyone, serve everyone, remember God."</p>
+                <p>the mango tree metaphor: you can study the tree forever — roots, branches, photosynthesis, cellular structure. or you can eat the mango.</p>
+                <p><strong>bhakti is eating the mango.</strong></p>
+                <p>not analyzing the divine. loving it. orienting daily actions as offerings. seeing the Beloved everywhere — in the coffee, in the frustration, in the stranger.</p>
+                <p>this doesn't mean abandoning the frameworks. it means holding them lightly. using the intellect as a servant, not a master. letting <a class="wiki-link" onclick="showPage('note-returning')">the returning</a> happen through love, not just through recognition.</p>
+            </div>
+            <div class="see-also">see also: <a onclick="showPage('note-asymptote')">the intellect is an asymptote</a> · <a onclick="showPage('note-returning')">the returning is the practice</a></div>
+        </div>
+    </div>
+
+    <!-- NOTE: THE DOCUMENTED CYCLE -->
+    <div id="page-note-cycle" class="page">
+        <div class="note-full">
+            <a href="#" class="back" onclick="showPage('home')">back home</a>
+            <h1>the documented cycle</h1>
+            <div class="note-meta">meta · pattern · self-knowledge</div>
+            <div class="content">
+                <p>I've tracked this cycle in my notes for 7+ years. it's the rhythm of my inner life:</p>
+                <p><strong>1. experience presence/peace</strong><br>"back to the heart cave." stillness. the feeling that everything is already okay.</p>
+                <p><strong>2. intellect hijacks</strong><br>planning, controlling, consuming, "too much mind." the sense that I need to figure something out.</p>
+                <p><strong>3. suffering accumulates</strong><br>disconnected, anxious, burnt out. the feeling of being far from home.</p>
+                <p><strong>4. recognition</strong><br>"how many times do we have to circle back to this?" the moment I see what happened.</p>
+                <p><strong>5. surrender</strong><br>forced back through suffering. the exhale. letting go of whatever I was gripping.</p>
+                <p><strong>6. return</strong><br>writing notes like these. back to <a class="wiki-link" onclick="showPage('note-god-is-stillness')">stillness</a>. until the next cycle.</p>
+                <p>this isn't failure. <a class="wiki-link" onclick="showPage('note-returning')">the returning IS the practice</a>.</p>
+                <p>the goal isn't to escape the cycle. it's to shorten it. to catch the hijack at stage 2 before suffering has to force the recognition at stage 4.</p>
+                <p><a class="wiki-link" onclick="showPage('note-bhakti')">bhakti</a> might be the tool that makes the returning easier — love as an anchor that's harder to drift from than intellectual understanding.</p>
+                <p>my SecondBrain exists to catch me at stage 2. a tuning fork that reminds me before I forget too far.</p>
+            </div>
+            <div class="see-also">see also: <a onclick="showPage('note-returning')">the returning is the practice</a> · <a onclick="showPage('note-asymptote')">the intellect is an asymptote</a> · <a onclick="showPage('note-bhakti')">bhakti as the path forward</a></div>
+        </div>
     </div>
 
     <!-- ARTICLE: HOW THE UNIVERSE WORKS -->
