@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>god's imagination — matt fracek</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0a0a0a;
+            --bg-surface: #111111;
+            --bg-elevated: #181818;
+            --text: #c8c8b4;
+            --text-bright: #e0e0cc;
+            --text-muted: #7a7a68;
+            --text-faint: #4a4a3e;
+            --accent: #b8a078;
+            --accent-dim: #8a7456;
+            --accent-glow: rgba(184, 160, 120, 0.12);
+            --accent-glow-strong: rgba(184, 160, 120, 0.25);
+            --border: rgba(200, 200, 180, 0.06);
+            --border-hover: rgba(200, 200, 180, 0.12);
+            --scanline: rgba(200, 200, 180, 0.015);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Courier Prime', 'Courier New', monospace;
+            font-size: 0.92rem;
+            line-height: 1.8;
+            -webkit-font-smoothing: antialiased;
+            min-height: 100vh;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: repeating-linear-gradient(0deg, transparent, transparent 2px, var(--scanline) 2px, var(--scanline) 4px);
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(ellipse at 50% 50%, transparent 60%, rgba(0,0,0,0.4) 100%);
+            pointer-events: none;
+            z-index: 99;
+        }
+
+        nav {
+            position: relative;
+            z-index: 10;
+            max-width: 680px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            font-weight: 300;
+            letter-spacing: 0.04em;
+        }
+
+        nav a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.15s ease;
+        }
+
+        nav a:hover { color: var(--accent); }
+
+        nav .site-name {
+            font-family: 'Special Elite', cursive;
+            font-size: 1rem;
+            color: var(--text-bright);
+            letter-spacing: 0.06em;
+        }
+
+        .content-wrap {
+            position: relative;
+            z-index: 1;
+            max-width: 680px;
+            margin: 0 auto;
+            padding: 3.5rem 1.5rem;
+        }
+
+        .back {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.72rem;
+            color: var(--text-faint);
+            text-decoration: none;
+            letter-spacing: 0.03em;
+            transition: color 0.15s ease;
+            display: inline-block;
+            margin-bottom: 2.5rem;
+        }
+
+        .back::before { content: '< '; }
+        .back:hover { color: var(--accent); }
+
+        h1 {
+            font-family: 'Special Elite', cursive;
+            font-weight: 400;
+            font-size: 1.6rem;
+            line-height: 1.5;
+            color: var(--text-bright);
+            margin-bottom: 0.6rem;
+        }
+
+        h1.page-title {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 0.8rem;
+            line-height: 1.3;
+        }
+
+        .title-marker {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .subtitle {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            letter-spacing: 0.03em;
+            font-weight: 300;
+            font-style: italic;
+            margin-bottom: 2.5rem;
+        }
+
+        .subtitle.centered {
+            text-align: center;
+        }
+
+        .divider {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            color: var(--text-faint);
+            letter-spacing: 0.3em;
+            text-align: center;
+            margin: 2.5rem 0;
+        }
+
+        .body-text p {
+            font-family: 'Courier Prime', monospace;
+            font-size: 0.92rem;
+            line-height: 1.85;
+            margin-bottom: 1.4rem;
+            color: var(--text);
+        }
+
+        .body-text p strong {
+            color: var(--text-bright);
+            font-weight: 700;
+        }
+
+        .body-text p em {
+            color: var(--text-muted);
+        }
+
+        .wiki-link {
+            color: var(--accent);
+            text-decoration: none;
+            border-bottom: 1px dotted var(--accent-dim);
+            cursor: pointer;
+            transition: border-color 0.15s ease;
+        }
+
+        .wiki-link:hover {
+            border-bottom-style: solid;
+        }
+
+        .go-deeper {
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .go-deeper h2 {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.68rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--text-faint);
+            margin-bottom: 1.5rem;
+        }
+
+        .go-deeper h2::before {
+            content: '> ';
+            color: var(--accent-dim);
+        }
+
+        .deeper-link {
+            display: block;
+            padding: 1rem 1.2rem;
+            border-left: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            text-decoration: none;
+            transition: border-color 0.15s ease, background 0.15s ease;
+        }
+
+        .deeper-link:first-of-type {
+            border-top: 1px solid var(--border);
+        }
+
+        .deeper-link:hover {
+            border-left-color: var(--accent);
+            background: var(--bg-surface);
+        }
+
+        .deeper-link .link-title {
+            font-family: 'Special Elite', cursive;
+            font-size: 1.05rem;
+            color: var(--text-bright);
+            margin-bottom: 0.25rem;
+        }
+
+        .deeper-link .link-desc {
+            font-family: 'Courier Prime', monospace;
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        footer {
+            position: relative;
+            z-index: 1;
+            max-width: 680px;
+            margin: 0 auto;
+            padding: 3rem 1.5rem 2.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            color: var(--text-faint);
+            letter-spacing: 0.04em;
+            border-top: 1px solid var(--border);
+            text-align: center;
+        }
+
+        footer em {
+            display: block;
+            margin-top: 0.5rem;
+            font-style: italic;
+        }
+
+        @media (max-width: 600px) {
+            .content-wrap { padding: 2.5rem 1.2rem; }
+            h1 { font-size: 1.3rem; }
+        }
+
+        /* page system */
+        .page { display: none; }
+        .page.active { display: block; }
+    </style>
+</head>
+<body>
+
+<nav>
+    <a href="#" class="site-name" onclick="showPage('front')">matt fracek</a>
+</nav>
+
+<!-- ═══════════ FRONT PAGE ═══════════ -->
+<div id="page-front" class="page active">
+<div class="content-wrap">
+    <a href="#" class="back" onclick="showPage('front')">god's imagination</a>
+
+    <div class="title-marker">
+        <svg width="220" height="52" viewBox="0 0 220 52" fill="none">
+            <path d="M110 8 A52 52 0 0 1 162 48" stroke="var(--accent)" stroke-width="1" fill="none" opacity="0.5"/>
+            <path d="M110 8 A52 52 0 0 0 58 48" stroke="var(--accent)" stroke-width="1" fill="none" opacity="0.5"/>
+            <line x1="0" y1="48" x2="220" y2="48" stroke="var(--accent)" stroke-width="1" opacity="0.4"/>
+            <line x1="15" y1="51" x2="205" y2="51" stroke="var(--accent)" stroke-width="0.5" opacity="0.2" stroke-dasharray="3 3"/>
+        </svg>
+    </div>
+
+    <h1 class="page-title">God's Imagination</h1>
+    <div class="subtitle centered">how reality works</div>
+
+    <div class="divider"><span>— ✧ —</span></div>
+
+    <div class="body-text">
+        <p>Close your eyes for a second.</p>
+
+        <p>Picture an apple. A red one. See the shine on its skin. Feel the weight of it in your hand. Now — where is that apple? It doesn't exist anywhere in the physical world. There's no apple in the room. There's no apple in your brain — if a surgeon opened your skull right now, they wouldn't find a tiny red apple in there.</p>
+
+        <p>And yet it's <em>real.</em> You saw it. You felt it. It was there. Made of... nothing. Just your consciousness, imagining.</p>
+
+        <p>Now here's the question: what's the difference between the apple you just imagined and the one sitting in your kitchen?</p>
+
+        <p>Both are images held in a mind. Both are "made of" consciousness forming shapes. The difference is power. Your imagining produces a faint mental image. But what if there were a Mind so powerful that its imagining produced something you could touch? Something your senses registered as solid, heavy, cold, sweet?</p>
+
+        <p>That's what you're looking at right now. Everything in front of you — the walls, the light, the air, <a class="wiki-link" onclick="showPage('what-is-this')">your own hands</a> — is being imagined by a Mind so powerful that the images feel solid. We call that Mind "God." We call its imagining "reality."</p>
+
+        <p>This isn't a metaphor. When you imagined that apple, you used the same faculty that's producing the universe right now. You're a subset of the one imagination. A smaller version of the same power. The reason you <em>can</em> imagine is because you're made in the image of the one who imagines everything.</p>
+
+        <p>That's why children play. That's why artists create. That's why you daydream. It's not a distraction from reality — it's a tiny echo of the power that IS reality.</p>
+
+        <p>And if everything is being imagined, then everything was imagined <strong>on purpose.</strong> You don't accidentally imagine characters when you write a story. Each one is chosen. Each one serves the plot. Look around you — every person you see was imagined into existence intentionally by a Mind that doesn't make accidents. Every single person has a purpose. The fact that you're here, reading this, alive — that's not random. You were imagined. You were chosen. You matter.</p>
+
+        <p>Now go deeper: if there's only one Mind doing the imagining, then every person you meet is the same Mind wearing a different face. The stranger on the street is the same imagination that made you. Your enemy is the same author that wrote your character. How do you hate someone when you realize you're both characters in the same story, written by the same hand, serving the same plot?</p>
+
+        <p>You can't. That's what love is — recognizing the one in the many. Seeing the author behind every character.</p>
+
+        <p>And the plot? It's simple. One word: <strong>Love.</strong> The whole story is a journey from not knowing you're loved to knowing it completely. Every experience, every struggle, every joy is a scene in that story. Even the hard chapters — <em>especially</em> the hard chapters — are moving you toward that recognition.</p>
+
+        <p>You're inside God's imagination right now. The question isn't whether this is true. The question is: now that you're starting to see it, how does it change the way you look at the person next to you?</p>
+    </div>
+
+    <div class="divider"><span>— ✧ —</span></div>
+
+    <div class="body-text">
+        <p>But <a class="wiki-link" onclick="showPage('why')">why does any of this exist</a>? Why is there something instead of nothing? Beneath the imagination, beneath the motion, beneath the movie — there is <a class="wiki-link" onclick="showPage('stillness')">stillness and silence</a>. The only things that can be eternal. The only things that qualify as God. Everything you see is a ripple in that stillness. And the practice of <a class="wiki-link" onclick="showPage('be-here-now')">being here now</a> — of stopping the narration for even one second — is how you touch it. Not by going somewhere else. By noticing what's already here, between your thoughts, waiting for you to <a class="wiki-link" onclick="showPage('how-to-still')">be still enough to see it</a>.</p>
+    </div>
+</div>
+
+<footer>
+    based on the teachings of walter &amp; lao russell, translated through lived experience
+    <em>this is a living document. click what pulls you.</em>
+</footer>
+</div>
+
+<!-- ═══════════ WHY PAGE ═══════════ -->
+<div id="page-why" class="page">
+<div class="content-wrap">
+    <a href="#" class="back" onclick="showPage('front')">back to how reality works</a>
+    <h1>Why Does Any of This Exist?</h1>
+    <div class="subtitle">why is there something instead of nothing?</div>
+
+    <div class="divider"><span>— ✧ —</span></div>
+
+    <div class="body-text">
+        <p>Because you asked that question.</p>
+
+        <p>Seriously. That's the answer. Stay with it for a second.</p>
+
+        <p>God is <a class="wiki-link" onclick="showPage('stillness')">stillness</a>. God is silence. God is the perfect equilibrium — before anything, before motion, before time, before "why." Just... complete. Whole. At rest.</p>
+
+        <p>Now: the instant the question "why?" arises, the equilibrium breaks. The stillness is stirred. A ripple crosses the surface of the infinite ocean. And that ripple — that single pulse of curiosity — is the entire universe.</p>
+
+        <p>Before the question, there is no seeker and nothing sought. No subject, no object. No here, no there. No time. Just God, undivided. The moment the question forms, duality appears. Subject and object. Question and answer. You and everything else. Time and space. The whole show.</p>
+
+        <p>We create the universe the second we want to put it into words.</p>
+
+        <p>The question "Why?" is the first word. And every galaxy, every sun, every atom, every face you've ever seen is one long echo of that word, still ringing.</p>
+    </div>
+
+    <div class="divider"><span>— ✧ —</span></div>
+
+    <div class="body-text">
+        <p><strong>But why would stillness want to move?</strong></p>
+
+        <p>To understand why God creates, look at why <em>you</em> create.</p>
+
+        <p>Think about children. When a child has all their needs met — when they're free of worry, fear, and self-consciousness — what do they naturally do? They play. They draw pictures. They build with blocks. They use their imagination to build storylines they take part in. Nobody teaches them to do this. Nobody forces them. They just... create. Because creating is more fun than sitting still.</p>
+
+        <p>Now zoom out. If there is a God — an intelligence with all of its needs met in every way, perfectly fulfilled, perfectly at rest — what would be the most fun thing to do?</p>
+
+        <p>Play.</p>
+
+        <p>Think about why a kid gets lost in Minecraft for hours. Just letting their imagination run wild, building worlds, shaping landscapes, creating something from nothing. That's basically all that creation is. It's an opportunity for imagination itself to simulate its ideas in physical form.</p>
+
+        <p>God is the kid. The universe is the Minecraft world. And we're inside the game.</p>
+    </div>
+
+    <div class="divider"><span>— ✧ —</span></div>
+
+    <div class="body-text">
+        <p><strong>The idea called Love</strong></p>
+
+        <p>But it's not random play. There's a theme.</p>
+
+        <p>On the highest level, there is one idea: <strong>Love.</strong> But love can't exist in stillness alone. Love needs expression. Love needs ingredients.</p>
+
+        <p>Think about baseball. For the <em>idea</em> of baseball to be expressed, you need 18 people, a field, a bat, a ball, bases, rules. You need all the ingredients. Without them, the idea of baseball just sits there — known but never experienced.</p>
+
+        <p>Creation is the same thing. Everything we see in this reality — every person, every relationship, every challenge, every joy — these are the ingredients needed to express the idea of love. When those ingredients interact correctly, they cancel each other out and what's left is love being played out like a movie.</p>
+
+        <p>Think of creation as a giant art piece called "Love."</p>
+    </div>
+
+    <div class="divider"><span>— ✧ —</span></div>
+
+    <div class="body-text">
+        <p><strong>The return</strong></p>
+
+        <p>Yet no matter how many universes unfold, the answer always circles back to silence.</p>
+
+        <p>Because silence is the only "answer" deep enough.</p>
+
+        <p>Every journey, every question, every seeking is simply a pathway back to the place before the question was asked. Back to God, naked as Now.</p>
+
+        <p>The arc: <strong>Why? &rarr; Creation &rarr; Multiplicity &rarr; Return to Silence.</strong></p>
+
+        <p>This experience is one giant dance. There is no finish line. There is no "making it." Every day is a micro part of that dance. Whatever you find yourself doing, the act of doing it is the most important part. Everything should be play. Every act should be sacred. Everything you do should be a means to itself.</p>
+
+        <p>The journey is everything.</p>
+    </div>
+
+    <div class="go-deeper">
+        <h2>go deeper</h2>
+        <a href="#" class="deeper-link" onclick="showPage('front')">
+            <div class="link-title">&larr; Back to How Reality Works</div>
+            <div class="link-desc">The front page. Start with what you can imagine.</div>
+        </a>
+        <a href="#" class="deeper-link" onclick="showPage('stillness')">
+            <div class="link-title">Stillness and silence</div>
+            <div class="link-desc">Where it all starts and where it all returns.</div>
+        </a>
+        <a href="#" class="deeper-link" onclick="showPage('be-here-now')">
+            <div class="link-title">Be here now</div>
+            <div class="link-desc">The practice of living from presence.</div>
+        </a>
+    </div>
+</div>
+<footer>
+    based on the teachings of walter &amp; lao russell, translated through lived experience
+</footer>
+</div>
+
+<!-- ═══════════ WHAT IS THIS PAGE ═══════════ -->
+<div id="page-what-is-this" class="page">
+<div class="content-wrap">
+    <a href="#" class="back" onclick="showPage('front')">back to how reality works</a>
+    <h1>What Is This, Actually?</h1>
+    <div class="subtitle">the science doorway</div>
+    <div class="divider"><span>— ✧ —</span></div>
+    <div class="body-text">
+        <p>Look at your hand.</p>
+        <p>Just look at it. Fingers, skin, maybe a freckle or two. It seems solid. Obviously real. If you press your thumb into your palm, you feel resistance — something pushing back. That's matter. That's the physical world. Nothing mystical about it.</p>
+        <p>But what is it?</p>
+        <p>Your hand is made of cells. Zoom into one cell and it's made of molecules. Zoom into a molecule and it's made of atoms. Zoom into an atom and it's... mostly empty space. A few unimaginably tiny particles orbiting an unimaginably tiny center, with vast emptiness between them. If an atom were the size of a football stadium, the nucleus would be a marble on the 50-yard line. The electrons would be gnats flying around the upper deck. Everything else — the entire stadium — is empty.</p>
+        <p>Your hand is almost entirely nothing. So why does it feel solid?</p>
+        <p>Because the "nothing" is moving. Those particles are in motion — fast, patterned, organized motion. And your senses can only detect motion. When the motion is fast enough and organized enough, your senses register it as "solid." It's the same reason a fan blade looks like a solid disc when it's spinning. Stop the fan and the disc vanishes — there were just a few thin blades and empty air the whole time.</p>
+        <p>Your hand is light in motion. Organized patterns of energy, spinning fast enough to feel like something. But there's no "stuff" there. <strong>"Matter is light."</strong></p>
+        <p>So what's organizing the motion?</p>
+        <p>Every atom in your hand has a center. A still point. The particles orbit around it, but the center itself doesn't move. It's like the eye of a hurricane — the winds can be 180 miles per hour, but at the center, not a blade of grass moves. That still center is what holds the atom together.</p>
+        <p>Every cell in your body has that still center. Every molecule. Every atom. Billions of still points, holding everything in place. And they're all the same still point — the same <a class="wiki-link" onclick="showPage('stillness')">stillness</a>, showing up everywhere at once, centering everything simultaneously.</p>
+        <p>That stillness is what some people call God. Not a man in the sky. Not a concept. The actual stillness at the center of the atom in your hand. Right now. Right here. Closer to you than your own skin.</p>
+        <p>You didn't have to believe anything to get here. You just looked at your hand and kept asking "what is this?" And you arrived at the same place every mystic in history has arrived: <strong>there is a still, invisible presence at the center of everything, and it's the only thing that's real.</strong></p>
+    </div>
+    <div class="go-deeper">
+        <h2>go deeper</h2>
+        <a href="#" class="deeper-link" onclick="showPage('front')">
+            <div class="link-title">&larr; Back to How Reality Works</div>
+            <div class="link-desc">The front page.</div>
+        </a>
+        <a href="#" class="deeper-link" onclick="showPage('stillness')">
+            <div class="link-title">Stillness and silence</div>
+            <div class="link-desc">Why God is still. Why that's the only place to start.</div>
+        </a>
+        <a href="#" class="deeper-link" onclick="showPage('be-here-now')">
+            <div class="link-title">Be here now</div>
+            <div class="link-desc">Stop thinking for one second. What's left?</div>
+        </a>
+    </div>
+</div>
+<footer>based on the teachings of walter &amp; lao russell, translated through lived experience</footer>
+</div>
+
+<!-- ═══════════ STILLNESS PAGE ═══════════ -->
+<div id="page-stillness" class="page">
+<div class="content-wrap">
+    <a href="#" class="back" onclick="showPage('front')">back to how reality works</a>
+    <h1>Stillness and Silence</h1>
+    <div class="subtitle">why God is still. why that matters. why it's the only place to start.</div>
+    <div class="divider"><span>— ✧ —</span></div>
+    <div class="body-text">
+        <p>The only way to understand infinity is through stillness.</p>
+        <p>Think about it. Can motion be infinite? Can something that's moving go on forever? Your mind resists that idea. Intuitively, you know: anything that moves must eventually stop. Anything that starts must eventually end. Motion is temporary by nature.</p>
+        <p>But stillness? Silence? They don't start. They don't stop. They don't need energy to sustain themselves. They don't burn out, wind down, or decay. They just... are. They were here before anything moved. They'll be here after everything stops moving. They are the only things that can hold the word <em>eternal.</em></p>
+        <p>That's why they're God.</p>
+        <p>Not because someone decided stillness is holy. Because stillness is the only thing that qualifies. If God is eternal — and the definition of God requires that — then God must be still. Motion can't do it. Only stillness can.</p>
+        <p>A still mind is the equilibrium of God.</p>
+    </div>
+    <div class="divider"><span>— ✧ —</span></div>
+    <div class="body-text">
+        <p><strong>The ripple</strong></p>
+        <p>Now picture a perfectly still ocean. Infinite, silent, at rest. That's God before creation. Not empty — full. Full of everything. All knowledge, all power, all presence. Just... still.</p>
+        <p>Then a desire arises. Not from outside — there is no outside. From within the stillness itself. A desire to express. To experience. To make the invisible visible.</p>
+        <p>And that desire sends a ripple across the surface.</p>
+        <p>That ripple is a thought. God's thought. And that thought — that single ripple in the infinite stillness — is the entire universe. Every star, every atom, every face, every moment. All of it is that one ripple, still moving, still unfolding, still playing out across the surface of an ocean that never stopped being still underneath.</p>
+        <p>Everything you see is <a class="wiki-link" onclick="showPage('front')">God imagining</a>. And imagining is just... a ripple in the silence.</p>
+    </div>
+    <div class="divider"><span>— ✧ —</span></div>
+    <div class="body-text">
+        <p><strong>The same thing happens inside you</strong></p>
+        <p>You sit in silence — maybe on a walk, maybe in the bath, maybe in that half-awake state after a nap. Your mind is still. No narration. No planning. Just quiet.</p>
+        <p>Then something arises. An idea. An inspiration. A download. You didn't go looking for it — it came from the stillness.</p>
+        <p>Now you act on it. You write. You create. You work. The stillness is replaced by motion. The idea unfolds through action.</p>
+        <p>And eventually, you're spent. The creative burst exhausts itself. You rest. You return to the silence. The wave collapses back into the ocean.</p>
+        <p>You're not <em>like</em> God. You're running the same program. Your creative cycle IS the universe breathing through you. The scale is different. The principle is identical.</p>
+    </div>
+    <div class="go-deeper">
+        <h2>go deeper</h2>
+        <a href="#" class="deeper-link" onclick="showPage('how-to-still')">
+            <div class="link-title">How to still the mind</div>
+            <div class="link-desc">Three ways back to the silence: presence, the witness, and the mantra.</div>
+        </a>
+        <a href="#" class="deeper-link" onclick="showPage('be-here-now')">
+            <div class="link-title">Be here now</div>
+            <div class="link-desc">The practice of returning to the stillness.</div>
+        </a>
+        <a href="#" class="deeper-link" onclick="showPage('front')">
+            <div class="link-title">&larr; Back to How Reality Works</div>
+            <div class="link-desc">The front page.</div>
+        </a>
+    </div>
+</div>
+<footer>based on the teachings of walter &amp; lao russell, translated through lived experience</footer>
+</div>
+
+<!-- ═══════════ BE HERE NOW PAGE ═══════════ -->
+<div id="page-be-here-now" class="page">
+<div class="content-wrap">
+    <a href="#" class="back" onclick="showPage('front')">back to how reality works</a>
+    <h1>Be Here Now</h1>
+    <div class="subtitle">not an argument. an invitation.</div>
+    <div class="divider"><span>— ✧ —</span></div>
+    <div class="body-text">
+        <p>Right now, you're reading these words. And while you're reading them, there's a voice in your head translating them into meaning. It's narrating. Commenting. Maybe agreeing, maybe questioning, maybe already jumping ahead to what comes next.</p>
+        <p>That voice is so constant that you probably don't even notice it's there. It's like a TV that's been on in the background your entire life. You've never known a room without it.</p>
+        <p>But here's the thing: that voice isn't you.</p>
+        <p>You're the one <em>listening</em> to it.</p>
+        <p>Right now — just for a second — stop reading and listen. Not to the words. To the silence underneath them. The gap between two thoughts. It's there. It's always there. You've just never looked at it because the voice is so loud.</p>
+        <p>That gap? That silence? That's you. The real you. Not the narration — the awareness that the narration is happening in.</p>
+    </div>
+    <div class="divider"><span>— ✧ —</span></div>
+    <div class="body-text">
+        <p>Think of a glass of water with dirt in it. If the glass is always moving, the dirt is always stirred up and the water is murky. You can't see through it. That's your mind when it's constantly narrating.</p>
+        <p>Now still the glass. Just... stop stirring. The dirt settles to the bottom on its own. You didn't have to remove it. You just stopped agitating it. And now the water is clear.</p>
+        <p>That's what presence is. It's not something you achieve. It's what's already there when you stop stirring.</p>
+    </div>
+    <div class="divider"><span>— ✧ —</span></div>
+    <div class="body-text">
+        <p>You've felt this before. You just didn't have a name for it.</p>
+        <p>You've felt it holding your child at 6 AM, their head on your chest, their breathing slow. No thoughts. No planning. Just... this. You've felt it on a walk when you suddenly notice the sky and realize you haven't been thinking for the last thirty seconds and everything looks more vivid. You've felt it playing a song when the music took over and something welled up in your chest that was too big for words.</p>
+        <p>In those moments, you weren't trying to be present. You weren't using a technique. The narration just... stopped. And what was underneath it was enormous. Peace. Gratitude. Love without a reason. The feeling that this — right here, right now — is the most incredible thing that has ever happened.</p>
+        <p>That's not a special state you achieved. That's what's always here. The narration is what covers it up.</p>
+    </div>
+    <div class="divider"><span>— ✧ —</span></div>
+    <div class="body-text">
+        <p>The present moment is the only place it exists.</p>
+        <p>You can't find this <a class="wiki-link" onclick="showPage('stillness')">stillness</a> in the past — the past is a thought. You can't find it in the future — the future is a thought. You can only find it <em>here.</em></p>
+        <p>That's what the mystics meant by eternity. Not a really long time. The total absence of time. The stillness that's here right now, that was here before you were born, that will be here after you die.</p>
+        <p>The kingdom isn't somewhere you go when you die. It's what's here when the narration stops. Heaven is this room, seen from the stillness. Hell is this room, seen through the mental noise.</p>
+        <p>Same room. Different eyes.</p>
+    </div>
+    <div class="divider"><span>— ✧ —</span></div>
+    <div class="body-text">
+        <p>You'll forget. You'll get pulled back into the narration within seconds. That's okay. That's not failure. The breath goes out and comes back — that's not the breath failing. That's the breath breathing.</p>
+        <p>Every time you notice you've been lost in thought and you come back to here — that tiny moment of return? That IS the practice. That's the whole thing.</p>
+        <p><em>Coming back. Remembering. That's the whole game.</em></p>
+    </div>
+    <div class="go-deeper">
+        <h2>go deeper</h2>
+        <a href="#" class="deeper-link" onclick="showPage('how-to-still')">
+            <div class="link-title">How to still the mind</div>
+            <div class="link-desc">Three ways back to the silence: presence, the witness, and the mantra.</div>
+        </a>
+        <a href="#" class="deeper-link" onclick="showPage('stillness')">
+            <div class="link-title">Stillness and silence</div>
+            <div class="link-desc">Why God is still. Why that's the only place to start.</div>
+        </a>
+        <a href="#" class="deeper-link" onclick="showPage('front')">
+            <div class="link-title">&larr; Back to How Reality Works</div>
+            <div class="link-desc">The front page.</div>
+        </a>
+    </div>
+</div>
+<footer>based on the teachings of walter &amp; lao russell, translated through lived experience</footer>
+</div>
+
+<!-- ═══════════ HOW TO STILL PAGE ═══════════ -->
+<div id="page-how-to-still" class="page">
+<div class="content-wrap">
+    <a href="#" class="back" onclick="showPage('stillness')">back to stillness and silence</a>
+    <h1>How to Still the Mind</h1>
+    <div class="subtitle">three doorways back to the silence</div>
+    <div class="divider"><span>— ✧ —</span></div>
+    <div class="body-text">
+        <p>You can't calm the water by more splashing. You can't think your way to no-thought. Force creates more motion, and motion is the very thing you're trying to still.</p>
+        <p>But you don't have to force it. The ocean wants to be still. Stillness is its default — the waves are the anomaly. All you have to do is stop adding new waves and the surface calms on its own.</p>
+        <p>Here are three ways to do that. They're not steps — they're doorways. Some days one works. Some days another.</p>
+    </div>
+    <div class="divider"><span>— ✧ —</span></div>
+    <div class="body-text">
+        <p><strong>1. Be totally present</strong></p>
+        <p>You can't have both. When you are in your thoughts you aren't present. When you are truly present there is no mind. Our awareness can only focus on one thing.</p>
+        <p>Walk around your neighborhood and be thinking about something — trying to solve a problem, trying to plan something. How much do you actually see? Or do you miss it all?</p>
+        <p>Now try the opposite. Drop the thoughts. Just look. Just hear. Just feel. The tree suddenly comes alive when you see "just tree." Nature and everything comes to life when you stop labeling and start experiencing.</p>
+        <p>Presence and thought occupy the same channel. When one is on, the other is off. You can either be in your thoughts or you can be here now. You can only be in one.</p>
+    </div>
+    <div class="divider"><span>— ✧ —</span></div>
+    <div class="body-text">
+        <p><strong>2. Be the witness</strong></p>
+        <p>Instead of trying to stop the thoughts, <em>watch them.</em></p>
+        <p>Simply watch your mind throughout the day. Watch how much randomness it "thinks" about. Watch it worry. Watch it gear up. Watch it project. The problem is when we get caught up in what it's saying.</p>
+        <p>So don't get caught up. Just watch.</p>
+        <p>When you're <em>inside</em> a thought — lost in it — it controls you. But when you <em>watch</em> a thought from behind it, it becomes just... a thing happening. A cloud passing through the sky. The sky doesn't chase the cloud.</p>
+        <p>You are the still silent witness sitting in the heart cave with loving awareness watching this divine drama unfold.</p>
+    </div>
+    <div class="divider"><span>— ✧ —</span></div>
+    <div class="body-text">
+        <p><strong>3. Use a mantra</strong></p>
+        <p>When the mind is really churning — when you can't be present because the thoughts are too loud, and you can't witness because you keep getting pulled back in — give the mind something deliberate to hold onto.</p>
+        <p>Think of it this way: an elephant and its handler go walking through a farmers market. The elephant sees all sorts of pretty objects and fruits and is constantly grabbing things and knocking things over. The next day, the handler finds a large stick and gives it to the elephant. Now that elephant walks through the market perfectly behaved because its trunk has been occupied and given a task to do.</p>
+        <p>Your mind is the elephant. Thoughts are the shiny objects. The mantra is the stick.</p>
+        <p>Pick a word — any word that means something to you. Repeat it silently. Gently. Like a rhythm. A thousand random waves become one deliberate wave. The surface calms. The one thought dissolves into no thought.</p>
+        <p>It's a controlled deceleration of motion back toward the <a class="wiki-link" onclick="showPage('stillness')">stillness</a>. A deliberate unwinding.</p>
+    </div>
+    <div class="divider"><span>— ✧ —</span></div>
+    <div class="body-text">
+        <p>On a calm day, presence is enough. On a busy day, the witness helps. On the really hard days, the mantra gives the elephant a stick to hold while the chaos settles.</p>
+        <p>All three lead to the same place: the stillness that was always there underneath.</p>
+    </div>
+    <div class="go-deeper">
+        <h2>go deeper</h2>
+        <a href="#" class="deeper-link" onclick="showPage('be-here-now')">
+            <div class="link-title">Be here now</div>
+            <div class="link-desc">The full exploration of presence and the present moment.</div>
+        </a>
+        <a href="#" class="deeper-link" onclick="showPage('stillness')">
+            <div class="link-title">Stillness and silence</div>
+            <div class="link-desc">Why God is still. Where it all starts.</div>
+        </a>
+        <a href="#" class="deeper-link" onclick="showPage('front')">
+            <div class="link-title">&larr; Back to How Reality Works</div>
+            <div class="link-desc">The front page.</div>
+        </a>
+    </div>
+</div>
+<footer>based on the teachings of walter &amp; lao russell, translated through lived experience</footer>
+</div>
+
+<script>
+function showPage(id) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById('page-' + id).classList.add('active');
+    window.scrollTo(0, 0);
+}
+</script>
+
+</body>
+</html>
