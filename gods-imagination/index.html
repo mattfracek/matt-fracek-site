@@ -646,6 +646,34 @@ function showPage(id) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.getElementById('page-' + id).classList.add('active');
     window.scrollTo(0, 0);
+    if (id === 'front') {
+        history.pushState(null, '', '/gods-imagination/');
+    } else {
+        history.pushState(null, '', '#' + id);
+    }
+}
+
+// handle browser back button
+window.addEventListener('popstate', function() {
+    var hash = location.hash.replace('#', '');
+    if (hash && document.getElementById('page-' + hash)) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.getElementById('page-' + hash).classList.add('active');
+        window.scrollTo(0, 0);
+    } else {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.getElementById('page-front').classList.add('active');
+        window.scrollTo(0, 0);
+    }
+});
+
+// load from hash on page load
+if (location.hash) {
+    var hash = location.hash.replace('#', '');
+    if (document.getElementById('page-' + hash)) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.getElementById('page-' + hash).classList.add('active');
+    }
 }
 </script>
 
