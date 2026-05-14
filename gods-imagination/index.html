@@ -642,6 +642,12 @@
 </div>
 
 <script>
+// prevent href="#" default action from resetting SPA state on mobile Safari
+document.addEventListener('click', function(e) {
+    var a = e.target.closest('a[href="#"]');
+    if (a) e.preventDefault();
+});
+
 function showPage(id) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.getElementById('page-' + id).classList.add('active');
